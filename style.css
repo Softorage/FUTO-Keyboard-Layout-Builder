@@ -1,0 +1,30 @@
+/* Minimal extras on top of Pico.css */
+
+#rows-container > fieldset {
+  border: 1px solid var(--gray-300);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+}
+
+legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.keys-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.key-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--gray-100);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FUTO Keyboard YAML Generator</title>
+  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>FUTO Keyboard Layout Builder</h1>
+
+    <form id="layout-form">
+      <label for="layout-name">Layout Name</label>
+      <input type="text" id="layout-name" required placeholder="e.g. English" />
+
+      <label for="layout-desc">Description</label>
+      <input type="text" id="layout-desc" placeholder="e.g. Modern Keyboard Layout for English" />
+
+      <label for="lang-code">Language Code</label>
+      <input type="text" id="lang-code" required placeholder="e.g. en-UK" />
+
+      <hr />
+      
+      <section id="rows-container"></section>
+
+      <div class="grid">
+        <button type="button" id="add-numbers-row">+ Numbers Row</button>
+        <button type="button" id="add-letters-row">+ Letters Row</button>
+        <button type="button" id="add-bottom-row">+ Bottom Row</button>
+      </div>
+
+      <hr />
+
+      <button type="button" id="preview-btn">Preview YAML</button>
+      <button type="button" id="download-btn" disabled>Download Layout</button>
+    </form>
+
+    <h2>Generated YAML</h2>
+    <pre id="yaml-output">Generated YAML for keyboard layout will appear here.</pre>
+
+    <hr />
+
+    <small>Created by Sanmay Joshi under <a href="https://softorage.com/">Softorage</a>.</small>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
