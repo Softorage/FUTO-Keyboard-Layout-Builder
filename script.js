@@ -31,6 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
     return warns;
   }
 
+  // Re-number existing letter rows and reset letterRowCount
+  function renumberLetterRows() {
+    let idx = 0;
+    rowsContainer
+      .querySelectorAll('[data-type="letters"]')
+      .forEach(fs => {
+        idx++;
+        fs.querySelector('legend span').textContent = `${idx} - LETTERS ROW`;
+      });
+    letterRowCount = idx;
+  }
+
   // Create a new row (numbers, letters, or bottom)
   function createRow(type) {
     const fs = document.createElement('fieldset');
@@ -38,10 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // legend with remove button
     const lg = document.createElement('legend');
-    lg.innerHTML = `<span>${type.toUpperCase()} ROW</span>
-                    <button type="button" class="remove-row">Remove</button>`;
+    lg.innerHTML = `<span>${type.toUpperCase()} ROW</span>⠀⠀⠀
+                    <button type="button" class="remove-row pico-background-red-600">🗑</button>`;
     fs.appendChild(lg);
-    lg.querySelector('.remove-row').onclick = () => fs.remove();
+    lg.querySelector('.remove-row').onclick = () => {
+      fs.remove();
+      if (type === 'letters') renumberLetterRows();
+    };
 
     // keys container and add-key button
     const keysDiv = document.createElement('div');
@@ -50,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const addKeyBtn = document.createElement('button');
     addKeyBtn.type = 'button';
+    addKeyBtn.classList.add('add-key');
     addKeyBtn.textContent = '+ Add Key';
     addKeyBtn.onclick = () => addKeyInput(keysDiv);
     fs.appendChild(addKeyBtn);
@@ -94,7 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const newRow = createRow('letters');
       // prefix the legend’s span with its sequence number
       newRow.querySelector('legend span').textContent = `${letterRowCount} - LETTERS ROW`;
-      rowsContainer.appendChild(newRow);
+      // insert letters row before the bottom row
+      const bottomRow = rowsContainer.querySelector('[data-type="bottom"]');
+      if (bottomRow) {
+        rowsContainer.insertBefore(newRow, bottomRow);
+      } else {
+        rowsContainer.appendChild(newRow);
+      }
     }
   };
   document.getElementById('add-bottom-row').onclick = () => {

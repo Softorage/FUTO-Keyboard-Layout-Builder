@@ -9,13 +9,14 @@
 
 legend {
   display: flex;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
   align-items: center;
 }
 
 .keys-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  /* exactly six columns */
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -27,4 +28,23 @@ legend {
   background: var(--gray-100);
   padding: 0.5rem;
   border-radius: 0.25rem;
+}
+
+/* full-width add-key buttons */
+.add-key {
+  width: 100%;
+}
+
+legend {
+  display: flex;
+  align-items: center;
+}
+/* make the remove button sit at the end */
+legend .remove-row {
+  margin-left: auto;
+}
+
+.pico-background-red-600 {
+  background-color: #861D13;
+  color: white;
 }
