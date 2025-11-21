@@ -23,6 +23,7 @@
 
       <hr />
       
+      <div>Rows:</div>
       <section id="rows-container"></section>
 
       <div class="grid">
@@ -33,6 +34,17 @@
 
       <hr />
 
+      <div>Other Attributes:</div>
+      <section id="other-attribute-container"></section>
+
+      <div class="grid">
+        <button type="button" id="add-other-attribute-item">+ Other Attribute</button>
+      </div>
+
+      <label style="display:inline-block; margin-left:8px;">
+        Import YAML
+        <input id="import-yaml-file" type="file" accept=".yml,.yaml,text/yaml" style="display:inline-block" />
+      </label>
       <button type="button" id="preview-btn">Preview YAML</button>
       <button type="button" id="download-btn" disabled>Download Layout</button>
     </form>
