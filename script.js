@@ -5,6 +5,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('layout-form');
   let letterRowCount = 0;
 
+  // Easy-to-edit set of special prefixes that prevent unicode substitution
+  // Add more characters here if desired, e.g. SPECIAL_PREFIXES.add('@')
+  const SPECIAL_PREFIXES = new Set(['$', '!']);
+
+  // Helper: convert a single string to UTF-16 \uXXXX escapes.
+  // For code points > 0xFFFF produces a surrogate pair as two \uXXXX sequences.
+  function toUtf16Escaped(str) {
+    if (str == null) return '';
+    let out = '';
+    // iterate by code points
+    for (let i = 0; i < str.length; ) {
+      const cp = str.codePointAt(i);
+      i += cp > 0xFFFF ? 2 : 1;
+      if (cp <= 0xFFFF) {
+        out += '\\u' + cp.toString(16).padStart(4, '0');
+      } else {
+        // produce surrogate pair
+        const v = cp - 0x10000;
+        const high = 0xD800 + (v >> 10);
+        const low = 0xDC00 + (v & 0x3FF);
+        out += '\\u' + high.toString(16).padStart(4, '0') + '\\u' + low.toString(16).padStart(4, '0');
+      }
+    }
+    return out;
+  }
+
+  // Decide whether to apply UTF-16 substitution for a given key string.
+  // Rule implemented per request:
+  // - If the value is a string and length > 1 and starts with any SPECIAL_PREFIXES, DO NOT convert.
+  // - Otherwise, convert (when substitution is requested).
+  function shouldConvertKeyValue(val) {
+    if (typeof val !== 'string') return true; // non-strings (e.g., objects) keep conversion behavior as-is
+    if (val.length > 1) {
+      const first = val[0];
+      if (SPECIAL_PREFIXES.has(first)) {
+        return false; // skip conversion for multi-character strings starting with special prefix
+      }
+    }
+    return true;
+  }
+
   /**
    * Returns an array of warning strings.
    * Accepts an optional root element to run checks against a preview DOM.
@@ -89,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     wrapper.innerHTML = `
       <label>Base Key
-        <input class="base" placeholder="e.g. a" />
+        <input class="base" placeholder="e.g. a, $shift" />
       </label>
       <label>Shifted Key
         <input class="shifted" placeholder="(optional) e.g. A" />
@@ -144,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const substituteCheckbox = document.getElementById('substitute-with-unicode-16');
+    const shouldSubstitute = substituteCheckbox ? substituteCheckbox.checked : false;
+
     const out = {
       name:      document.getElementById('layout-name').value.trim(),
       description: document.getElementById('layout-desc').value.trim() || undefined,
@@ -156,15 +200,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const keysArr = [];
 
       fs.querySelectorAll('.key-field').forEach(f => {
-        const base = f.querySelector('.base').value.trim();
-        if (!base) return;
-        const shifted = f.querySelector('.shifted').value.trim();
-        const moreB = f.querySelector('.more-base').value
+        const rawBase = f.querySelector('.base').value.trim();
+        if (!rawBase) return;
+        const rawShifted = f.querySelector('.shifted').value.trim();
+        const rawMoreB = f.querySelector('.more-base').value
                           .split(/\s*,\s*/)
                           .filter(s=>s);
-        const moreS = f.querySelector('.more-shifted').value
+        const rawMoreS = f.querySelector('.more-shifted').value
                           .split(/\s*,\s*/)
                           .filter(s=>s);
+
+        // apply substitution if requested, but skip conversion for entries matching special prefix rules
+        const base = shouldSubstitute && shouldConvertKeyValue(rawBase) ? toUtf16Escaped(rawBase) : rawBase;
+        const shifted = rawShifted
+        ? (shouldSubstitute && shouldConvertKeyValue(rawShifted) ? toUtf16Escaped(rawShifted) : rawShifted)
+        : rawShifted;
+        const moreB = shouldSubstitute
+        ? rawMoreB.map(x => shouldConvertKeyValue(x) ? toUtf16Escaped(x) : x)
+        : rawMoreB;
+        const moreS = shouldSubstitute
+        ? rawMoreS.map(x => shouldConvertKeyValue(x) ? toUtf16Escaped(x) : x)
+        : rawMoreS;
 
         // Decide structure
         if (shifted) {
@@ -197,12 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove undefined description if empty
     if (!out.description) delete out.description;
 
-    // Merge other attributes from section#other-attribute-container
-    const otherAttrs = collectOtherAttributes();
-    for (const k in otherAttrs) {
+    // Merge other properties from section#other-property-container
+    const otherProps = collectOtherProperties();
+    for (const k in otherProps) {
       // don't overwrite standard keys
       if (['name','description','languages','rows'].includes(k)) continue;
-      out[k] = otherAttrs[k];
+      out[k] = otherProps[k];
     }
 
     // YAML dump
@@ -250,18 +306,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // ------------------ Other-attributes renderer helpers ------------------
+  // ------------------ Other-properties renderer helpers ------------------
 
-  // Clear existing other-attribute UI
-  function clearOtherAttributes() {
-    const container = document.querySelector('section#other-attribute-container');
+  // Clear existing other-property UI
+  function clearOtherProperties() {
+    const container = document.querySelector('section#other-property-container');
     if (!container) return;
     container.innerHTML = '';
   }
 
-  // Parse a textual attribute value into a JS value.
+  // Parse a textual property value into a JS value.
   // Tries: jsyaml.load -> JSON.parse -> raw string
-  function parseAttributeValue(text) {
+  function parsePropertyValue(text) {
     const trimmed = (text || '').trim();
     if (!trimmed) return undefined;
     try {
@@ -279,20 +335,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Collect other attributes currently present in the UI into an object
-  function collectOtherAttributes() {
+  // Collect other properties currently present in the UI into an object
+  function collectOtherProperties() {
     const out = {};
-    const container = document.querySelector('section#other-attribute-container');
+    const container = document.querySelector('section#other-property-container');
     if (!container) return out;
 
-    const items = container.querySelectorAll('.other-attribute-item');
+    const items = container.querySelectorAll('.other-property-item');
     items.forEach(item => {
       const nameInput = item.querySelector('.other-attr-name');
       const valueArea = item.querySelector('.other-attr-value');
       if (!nameInput) return;
       const key = (nameInput.value || '').trim();
       if (!key) return;
-      const parsed = parseAttributeValue(valueArea ? valueArea.value : '');
+      const parsed = parsePropertyValue(valueArea ? valueArea.value : '');
       // only set if parsed is not undefined; otherwise set empty string
       out[key] = parsed === undefined ? '' : parsed;
     });
@@ -301,10 +357,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render all top-level keys other than name/description/languages/rows
   // `obj` is the parsed YAML top-level object
-  function renderOtherAttributesFromObject(obj) {
-    const container = document.querySelector('section#other-attribute-container');
+  function renderOtherPropertiesFromObject(obj) {
+    const container = document.querySelector('section#other-property-container');
     if (!container) return;
-    clearOtherAttributes();
+    clearOtherProperties();
 
     const allowed = new Set(['name', 'description', 'languages', 'rows']);
     Object.keys(obj || {}).forEach((key) => {
@@ -314,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Parent wrapper for styling / removal later if needed
       const wrapper = document.createElement('div');
-      wrapper.className = 'other-attribute-item';
+      wrapper.className = 'other-property-item';
       wrapper.style.marginBottom = '0.5rem';
       wrapper.style.position = 'relative';
 
@@ -322,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'remove-attr';
-      removeBtn.title = 'Remove attribute';
+      removeBtn.title = 'Remove property';
       removeBtn.textContent = '✖';
       Object.assign(removeBtn.style, {
         position: 'absolute',
@@ -338,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // name input (prefilled)
       const nameLabel = document.createElement('label');
-      nameLabel.textContent = 'Attribute name';
+      nameLabel.textContent = 'Property name';
       nameLabel.style.display = 'block';
       const nameInput = document.createElement('input');
       nameInput.type = 'text';
@@ -349,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // value textarea (prefilled with YAML dump for readability)
       const valueLabel = document.createElement('label');
-      valueLabel.textContent = 'Attribute value';
+      valueLabel.textContent = 'Property value';
       valueLabel.style.display = 'block';
       const valueArea = document.createElement('textarea');
       valueArea.className = 'other-attr-value';
@@ -375,13 +431,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Create a single other-attribute item (used by import renderer and the "Add" button)
-  function createOtherAttributeItem(name = '', value = '') {
-    const container = document.querySelector('section#other-attribute-container');
+  // Create a single other-property item (used by import renderer and the "Add" button)
+  function createOtherPropertyItem(name = '', value = '') {
+    const container = document.querySelector('section#other-property-container');
     if (!container) return null;
 
     const wrapper = document.createElement('div');
-    wrapper.className = 'other-attribute-item';
+    wrapper.className = 'other-property-item';
     wrapper.style.marginBottom = '0.5rem';
     wrapper.style.position = 'relative';
 
@@ -389,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'remove-attr';
-    removeBtn.title = 'Remove attribute';
+    removeBtn.title = 'Remove property';
     removeBtn.textContent = '✖';
     Object.assign(removeBtn.style, {
       position: 'absolute',
@@ -405,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // name input
     const nameLabel = document.createElement('label');
-    nameLabel.textContent = 'Attribute name';
+    nameLabel.textContent = 'Property name';
     nameLabel.style.display = 'block';
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
@@ -416,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // value textarea
     const valueLabel = document.createElement('label');
-    valueLabel.textContent = 'Attribute value';
+    valueLabel.textContent = 'Property value';
     valueLabel.style.display = 'block';
     const valueArea = document.createElement('textarea');
     valueArea.className = 'other-attr-value';
@@ -449,15 +505,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return wrapper;
   }
 
-  // Wire the "Add other attribute" button to append an empty other-attribute-item
-  const addOtherBtn = document.getElementById('add-other-attribute-item');
+  // Wire the "Add other property" button to append an empty other-property-item
+  const addOtherBtn = document.getElementById('add-other-property-item');
   if (addOtherBtn) {
     addOtherBtn.type = 'button';
     addOtherBtn.addEventListener('click', () => {
-      createOtherAttributeItem('', '');
+      createOtherPropertyItem('', '');
     });
   }
-// Reuse an existing key creation helper for programmatic insertion
+  // Reuse an existing key creation helper for programmatic insertion
   // This mirrors the addKeyInput DOM structure.
   function createKeyWrapperForData(kd) {
     const wrapper = document.createElement('div');
@@ -734,8 +790,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof obj.description === 'string') document.getElementById('layout-desc').value = obj.description;
       if (typeof obj.languages === 'string') document.getElementById('lang-code').value = obj.languages;
 
-      // render any other top-level attributes into section#other-attribute-container
-      renderOtherAttributesFromObject(obj);
+      // render any other top-level properties into section#other-property-container
+      renderOtherPropertiesFromObject(obj);
 
 
       const rowDefs = Array.isArray(obj.rows) ? obj.rows : [];
@@ -817,8 +873,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
           }
 
-          // render the other attributes into the real UI as well
-          renderOtherAttributesFromObject(obj);
+          // render the other properties into the real UI as well
+          renderOtherPropertiesFromObject(obj);
         },
         // onCancel
         () => {

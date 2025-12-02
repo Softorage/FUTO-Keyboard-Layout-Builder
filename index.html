@@ -34,20 +34,29 @@
 
       <hr />
 
-      <div>Other Attributes:</div>
-      <section id="other-attribute-container"></section>
+      <div>Other Properties:</div>
+      <section id="other-property-container"></section>
 
       <div class="grid">
-        <button type="button" id="add-other-attribute-item">+ Other Attribute</button>
+        <button type="button" id="add-other-property-item">+ Other Property</button>
       </div>
 
-      <label style="display:inline-block; margin-left:8px;">
-        Import YAML
-        <input id="import-yaml-file" type="file" accept=".yml,.yaml,text/yaml" style="display:inline-block" />
+      <hr />
+
+      <labeL>
+        <input id="substitute-with-unicode-16" type="checkbox">
+        Substitute keys with UTF-16
+      </labeL>
+
+      <label style="display:inline-block;">
+        Click to Import YAML
+        <input id="import-yaml-file" type="file" accept=".yml,.yaml,text/yaml" style="display:none" />
       </label>
-      <button type="button" id="preview-btn">Preview YAML</button>
+      <button style="margin-left:8px;" type="button" id="preview-btn">Preview YAML</button>
       <button type="button" id="download-btn" disabled>Download Layout</button>
     </form>
+
+      <hr />
 
     <h2>Generated YAML</h2>
     <pre id="yaml-output">Generated YAML for keyboard layout will appear here.</pre>
