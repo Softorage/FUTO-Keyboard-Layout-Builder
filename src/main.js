@@ -121,7 +121,7 @@ function addKeyField(container, data = null) {
   return true;
 }
 
-function createRow(type) {
+function createRow(type, automatic = false) {
   const tmpl = document.getElementById('tmpl-row');
   const row = tmpl.content.cloneNode(true).firstElementChild;
   
@@ -137,7 +137,9 @@ function createRow(type) {
   
   row.querySelector('.add-key').addEventListener('click', () => addKeyField(keysContainer));
 
-  addKeyField(keysContainer)
+  if (!automatic) {
+    addKeyField(keysContainer);
+  }
   
   return row;
 }
@@ -360,7 +362,7 @@ function buildPreviewFragment(parsedRows) {
       if (letterCount > 8) { warnings.push('More than 8 letters rows ignored.'); break; }
     }
 
-    const rowEl = createRow(type);
+    const rowEl = createRow(type, true);
     const keysDiv = rowEl.querySelector('.keys-container');
 
     let added = 0;
