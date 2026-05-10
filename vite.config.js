@@ -5,4 +5,6 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  // base export is required if the url is at a slug
+  base: '/futo-keyboard-layout-builder/', 
 })
