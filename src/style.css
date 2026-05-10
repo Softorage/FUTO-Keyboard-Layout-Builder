@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "daisyui/index.js" {
+  themes: light, dark --default;
+ };
+
+/*
+  When @tailwindcss/vite tries to load @plugin "daisyui", Vite accidentally reads the "browser": "./daisyui.css" field inside DaisyUI's package.json[1]. It tries to execute that .css file as if it were the JavaScript plugin, which crashes the build.
+  Force Vite to load the JS plugin file instead of the CSS file.
+*/

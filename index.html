@@ -1,84 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FUTO Keyboard YAML Generator</title>
-  <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <title>FUTO Keyboard Layout Generator</title>
 </head>
-<body>
-  <main class="container">
-    <h1>FUTO Keyboard Layout Builder</h1>
-    <a href="https://github.com/Softorage/FUTO-Keyboard-Layout-Builder/blob/main/README.md">Short README for basic instructions</a>
 
-    <br />
-    <br />
+<body class="drawer lg:drawer-open bg-base-200 text-base-content antialiased">
+  <input id="menu-sidebar" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content">
+    <header>
+      <nav class="navbar w-full bg-base-100 shadow-sm fixed top-0 z-5000">
+        <div class="flex-none">
+          <label for="menu-sidebar" aria-label="open sidebar" class="btn btn-square btn-ghost">
+            <!-- Sidebar toggle icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              class="inline-block h-5 w-5 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </label>
+        </div>
+        <div class="flex-1">
+          <a class="tooltip tooltip-bottom" data-tip="FUTO Keyboard Layout Builder"><span class="btn btn-ghost text-xl">FtKbLB</span></a>
+        </div>
+      </nav>
+    </header>
 
-    <form id="layout-form">
-      <label for="layout-name">Layout Name</label>
-      <input type="text" id="layout-name" required placeholder="e.g. English" />
+    <main class="mx-auto max-w-5xl p-4 md:p-6">
+      <div class="h-14"></div>
+      <!-- to account for height of navbar, search bar appearing on mobile view and push the content of hero section down -->
+      <form id="layout-form" class="space-y-8">
+        <!-- Top Metadata Grid -->
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label class="w-full">
+              <div class=""><span class="text-base-content/75 font-semibold text-lg">Layout Name</span></div>
+              <input type="text" id="layout-name" required placeholder="e.g. English"
+                class="input input-bordered w-full" />
+            </label>
 
-      <label for="layout-desc">Description</label>
-      <input type="text" id="layout-desc" placeholder="e.g. Modern Keyboard Layout for English" />
+            <label class="w-full">
+              <div class=""><span class="text-base-content/75 font-semibold text-lg">Language Code</span></div>
+              <input type="text" id="lang-code" required placeholder="e.g. en-UK" class="input input-bordered w-full" />
+            </label>
+          </div>
 
-      <label for="lang-code">Language Code</label>
-      <input type="text" id="lang-code" required placeholder="e.g. en-UK" />
+          <label class="block w-full">
+            <div class=""><span class="text-base-content/75 font-semibold text-lg">Description</span></div>
+            <input type="text" id="layout-desc" placeholder="e.g. Modern Keyboard Layout"
+              class="input input-bordered w-full" />
+          </label>
 
-      <hr />
-      
-      <div>Rows:</div>
-      <section id="rows-container"></section>
+          <div class="w-fit mb-6">
+            <label class="cursor-pointer flex gap-3">
+              <input id="substitute-with-unicode-16" type="checkbox" class="checkbox checkbox-primary" />
+              <span class="text-base-content/75 font-medium">Substitute keys with UTF-16</span>
+            </label>
+          </div>
+        </div>
 
-      <div class="grid">
-        <button type="button" id="add-numbers-row">+ Numbers Row</button>
-        <button type="button" id="add-letters-row">+ Letters Row</button>
-        <button type="button" id="add-bottom-row">+ Bottom Row</button>
+        <div class="divider"></div>
+
+        <!-- Rows Section -->
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Rows</h3>
+          <section id="rows-container" class="space-y-4"></section>
+
+          <div class="flex flex-wrap gap-2 mt-4">
+            <button type="button" id="add-numbers-row" class="btn btn-outline">+ Numbers Row</button>
+            <button type="button" id="add-letters-row" class="btn btn-outline">+ Letters Row</button>
+            <button type="button" id="add-bottom-row" class="btn btn-outline">+ Bottom Row</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Other Properties Section -->
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Other Properties</h3>
+          <section id="other-property-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"></section>
+
+          <button type="button" id="add-other-property-item" class="btn btn-outline">+ Other Property</button>
+        </div>
+      </form>
+
+      <div class="divider mt-12 mb-8"></div>
+
+      <!-- YAML Output Box -->
+      <h2 class="text-2xl font-bold mb-4">Generated YAML</h2>
+      <!--need another tab for og imported layout to see if import messed up-->
+      <div class="w-full bg-neutral text-neutral-content p-4 rounded-xl overflow-auto">
+        <pre><code id="yaml-output">Generated YAML for keyboard layout will appear here.</code></pre>
       </div>
 
-      <hr />
+      <!-- Footer Notes -->
+      <footer class="mt-12 text-sm opacity-70 space-y-2">
+        <p>Created by Sanmay Joshi under <a href="https://softorage.com/" target="_blank"
+            class="link hover:text-primary">Softorage</a>.</p>
+        <p class="text-xs">
+          Disclaimer: Sanmay Joshi and Softorage are not affiliated with FUTO or FUTO Keyboard. This tool is designed
+          solely for assistance purposes. No warranties or guarantees are provided regarding the accuracy or reliability
+          of the tool or any information. Use at your own risk.
+        </p>
+      </footer>
+    </main>
+  </div>
 
-      <div>Other Properties:</div>
-      <section id="other-property-container"></section>
+  <div class="drawer-side is-drawer-close:overflow-visible">
+    <label for="menu-sidebar" aria-label="close sidebar" class="drawer-overlay"></label>
+    <div class="flex min-h-full flex-col items-start bg-base-300 is-drawer-close:w-14 is-drawer-open:w-64 pt-16">
+      <!-- Sidebar content here -->
+      <ul class="menu w-full grow gap-2">
+        <li>
+          <a href="https://github.com/Softorage/FUTO-Keyboard-Layout-Builder/blob/main/README.md" target="_blank"
+            rel="noopener noreferrer" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Basic Instructions" aria-label="Basic instructions (opens in a new tab)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" x2="12.01" y1="17" y2="17" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Basic Instructions</span>
+          </a>
+        </li>
 
-      <div class="grid">
-        <button type="button" id="add-other-property-item">+ Other Property</button>
+        <li>
+          <!-- Import YAML File -->
+          <label role="button" tabindex="0" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Import Layout (YAML)" aria-label="Import YAML File">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" x2="12" y1="3" y2="15" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Import Layout</span>
+            <input id="import-yaml-file" type="file" accept=".yml,.yaml,text/yaml" class="hidden" />
+          </label>
+        </li>
+
+        <li>
+          <!-- Preview YAML Output -->
+          <button type="button" id="preview-btn" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Preview Output" aria-label="Preview YAML Output">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Preview Output</span>
+          </button>
+        </li>
+
+        <li>
+          <!-- Download Layout -->
+          <button type="button" id="download-btn" disabled class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Download Layout" aria-label="Download Layout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" x2="12" y1="15" y2="3" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Download Layout</span>
+          </button>
+        </li>
+
+        <li class="flex grow justify-end">
+          <!-- by Softorage -->
+          <a href="https://softorage.com/" target="_blank" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="A Softorage Project" aria-label="A Softorage Project">
+            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 654 422"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(299 -217.236 229.302 315.607 178 319.618)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00b6ec"/><stop offset="1" stop-color="#00d874"/></linearGradient></defs><path d="M649.4 194.4c6 9 6 23.6 0 32.7l-75.8 115.2c-6 9-15.6 9-21.5 0-6-9-6-23.6 0-32.6l65.1-99-65.1-99c-5.9-9-5.9-23.6 0-32.6s15.6-9 21.5 0c0 0 75.9 115.2 75.8 115.3" style="fill:#00d774"/><path d="M5.2 194.9c-5.9 9-5.9 23.6 0 32.7L80.9 343c5.9 9 15.5 9 21.4 0s5.9-23.7 0-32.7l-65-99.1 64.9-99.2c5.9-9 5.9-23.6 0-32.7-5.9-9-15.5-9-21.4 0 0 0-75.7 115.5-75.6 115.6" style="fill:#00b6eb"/><path d="M324.3 233.2q-69.5-20-101.4-49-31.5-29.3-31.5-72.1 0-48.5 38.6-80Q268.8.3 330.8.3q42.3 0 75.2 16.3 33.2 16.3 51.3 45.1 18.3 28.7 18.3 62.8h-54.4q0-37.2-23.6-58.3-23.7-21.4-66.8-21.4-40 0-62.5 17.7Q246 80 246 111.2q0 25.1 21.1 42.6 21.5 17.2 72.4 31.5 51.3 14.4 80 31.8 29 17.2 42.8 40.3 14.1 23.1 14.1 54.4 0 49.8-38.8 80-38.9 29.8-104 29.8-42.2 0-78.8-16-36.7-16.4-56.7-44.5-19.7-28.2-19.7-64h54.4q0 37.2 27.3 58.9 27.6 21.4 73.5 21.4 42.8 0 65.6-17.5 22.9-17.4 22.9-47.6 0-30.1-21.2-46.4-21.1-16.6-76.6-32.7" aria-label="S" style="fill:url(#a)"/></svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">A Softorage Project</span>
+            <svg class="is-drawer-close:hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- =============================== -->
+  <!--           TEMPLATES             -->
+  <!-- =============================== -->
+
+  <!-- Row Container Template -->
+  <template id="tmpl-row">
+    <div data-type="" class="card bg-base-300 shadow-sm border border-base-300">
+      <div class="card-body p-4 md:p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="card-title text-lg m-0 row-title uppercase tracking-wide">ROW</h4>
+          <button type="button" class="remove-row btn btn-error btn-sm btn-square" title="Remove Row">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+        <div class="keys-container flex flex-col gap-3"></div>
+        <div class="mt-4">
+          <button type="button" class="add-key btn btn-neutral">+ Add Key</button>
+        </div>
       </div>
+    </div>
+  </template>
 
-      <hr />
-
-      <labeL>
-        <input id="substitute-with-unicode-16" type="checkbox">
-        Substitute keys with UTF-16
-      </labeL>
-
-      <label style="display:inline-block;">
-        Click to Import YAML
-        <input id="import-yaml-file" type="file" accept=".yml,.yaml,text/yaml" style="display:none" />
+  <!-- Single Key Field Template -->
+  <template id="tmpl-key-field">
+    <div
+      class="key-field bg-base-100 border border-base-300 rounded-box p-3 relative flex flex-col lg:flex-row gap-3 items-end shadow-sm">
+      <label class="w-full">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Base Key</span></div>
+        <input class="base input input-sm input-bordered w-full" placeholder="e.g. a, $shift" />
       </label>
-      <button style="margin-left:8px;" type="button" id="preview-btn">Preview YAML</button>
-      <button type="button" id="download-btn" disabled>Download Layout</button>
+      <label class="w-full">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Shifted Key</span></div>
+        <input class="shifted input input-sm input-bordered w-full" placeholder="e.g. A" />
+      </label>
+      <label class="w-full">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">More-keys (Base)</span></div>
+        <input class="more-base input input-sm input-bordered w-full" placeholder="comma-sep" />
+      </label>
+      <label class="w-full">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">More-keys (Shift)</span></div>
+        <input class="more-shifted input input-sm input-bordered w-full" placeholder="comma-sep" />
+      </label>
+      <button type="button" class="remove-key btn btn-error btn-sm btn-square shrink-0" title="Remove Key">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </template>
+
+  <!-- Other Property Item Template -->
+  <template id="tmpl-other-property">
+    <div class="other-property-item bg-base-300 border border-base-300 rounded-box p-4 relative shadow-sm">
+      <button type="button" class="remove-attr btn btn-error btn-xs btn-circle absolute top-2 right-2"
+        title="Remove property">✕</button>
+      <label class="block w-full mb-4">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Property name</span></div>
+        <input type="text" class="other-attr-name input input-sm input-bordered w-full pr-8"
+          placeholder="e.g. bottomRowWidthMode" />
+      </label>
+      <label class="block w-full">
+        <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Property value</span></div>
+        <textarea class="other-attr-value textarea textarea-bordered w-full font-mono text-sm leading-tight" rows="3"
+          placeholder="e.g. Identical"></textarea>
+      </label>
+    </div>
+  </template>
+
+  <!-- =============================== -->
+  <!-- IMPORT MODAL DIALOG             -->
+  <!-- =============================== -->
+  <dialog id="import-modal" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-xl mb-4">Import Preview</h3>
+
+      <div id="modal-summary" class="mb-4"></div>
+      <div id="modal-warnings" class="mb-4"></div>
+
+      <div class="modal-action">
+        <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" id="modal-proceed">Proceed & Apply</button>
+      </div>
+    </div>
+    <!-- Clicking outside closes the modal -->
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
     </form>
+  </dialog>
 
-      <hr />
+  <script type="module" src="/src/main.js"></script>
 
-    <h2>Generated YAML</h2>
-    <pre id="yaml-output">Generated YAML for keyboard layout will appear here.</pre>
-
-    <hr />
-
-    <small>Created by Sanmay Joshi under <a href="https://softorage.com/">Softorage</a>.</small>
-
-    <br />
-    <br />
-
-    <small>
-      Disclaimer: Sanmay Joshi and Softorage are not affiliated with FUTO or FUTO Keyboard. This tool is designed solely for assistance purposes. No warranties or guarantees are provided regarding the accuracy or reliability of the tool or any information. Use at your own risk.
-    </small>
-
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
-  <script src="script.js"></script>
 </body>
+
 </html>
