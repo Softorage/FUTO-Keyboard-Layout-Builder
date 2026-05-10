@@ -2,6 +2,7 @@
   "name": "futo-keyboard-layout-builder",
   "version": "1.0.0",
   "description": "A simple web based graphical interface to help create keyboard layout for FUTO Keyboard",
+  "packageManager": "pnpm@10.33.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +11,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.2.4",
-    "tailwindcss": "^4.2.4",
-    "vite": "^8.0.10"
+    "@tailwindcss/vite": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "vite": "^8.0.11"
   },
   "author": "Sanmay Joshi and Softorage",
   "license": "Apache-2.0",
