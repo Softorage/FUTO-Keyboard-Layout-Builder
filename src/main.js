@@ -440,4 +440,5 @@ if (DOM.importInput) {
 
 // Add a letter row and other property on page load
 DOM.rowsContainer.appendChild(createRow('letters'));
+renumberLetterRows();
 addOtherProperty();
