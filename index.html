@@ -80,10 +80,17 @@
       <div class="divider mt-12 mb-8"></div>
 
       <!-- YAML Output Box -->
-      <h2 class="text-2xl font-bold mb-4">Generated YAML</h2>
-      <!--need another tab for og imported layout to see if import messed up-->
-      <div class="w-full bg-neutral text-neutral-content p-4 rounded-xl overflow-auto">
-        <pre><code id="yaml-output">Generated YAML for keyboard layout will appear here.</code></pre>
+      <!-- name of each tab group should be unique -->
+      <div class="tabs tabs-border">
+        <input type="radio" name="yaml_output" class="tab" aria-label="Generated Layout" checked="checked" />
+        <div class="tab-content bg-neutral text-neutral-content p-4 rounded-xl overflow-auto">
+          <pre><code id="generated-layout">YAML for generated keyboard layout will appear here.</code></pre>
+        </div>
+
+        <input type="radio" name="yaml_output" class="tab" aria-label="Imported Layout"/>
+        <div class="tab-content bg-neutral text-neutral-content p-4 rounded-xl overflow-auto">
+          <pre><code id="imported-layout">YAML for imported keyboard layout will appear here.</code></pre>
+        </div>
       </div>
 
       <!-- Footer Notes -->
@@ -252,7 +259,7 @@
 
         <li class="flex flex-col gap-2 grow justify-end">
           <label class="swap swap-rotate tooltip tooltip-right" data-tip="Change Theme">
-            <input type="checkbox" value="dark" class="theme-controller" />
+            <input type="checkbox" value="light" class="theme-controller" />
             <!-- sun icon -->
             <svg
               class="swap-off h-5 w-5 fill-red-400"

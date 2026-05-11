@@ -6,7 +6,8 @@ const DOM = {
   rowsContainer: document.getElementById('rows-container'),
   otherPropContainer: document.getElementById('other-property-container'),
   form: document.getElementById('layout-form'),
-  yamlOutput: document.getElementById('yaml-output'),
+  generatedLayout: document.getElementById('generated-layout'),
+  importedLayout: document.getElementById('imported-layout'),
   downloadBtn: document.getElementById('download-btn'),
   importInput: document.getElementById('import-yaml-file'),
   importModal: document.getElementById('import-modal'),
@@ -261,7 +262,7 @@ DOM.form.addEventListener('submit', e => {
   }
 
   const yamlStr = jsyaml.dump(out, { lineWidth: 80 });
-  DOM.yamlOutput.textContent = yamlStr;
+  DOM.generatedLayout.textContent = yamlStr;
 
   DOM.downloadBtn.disabled = false;
   DOM.downloadBtn.onclick = () => {
@@ -328,6 +329,9 @@ async function importYamlFileWithPreview(file) {
       // Re-generate YAML so download state activates
       DOM.form.requestSubmit(); 
     });
+
+    // Populate Imported layout tab
+    DOM.importedLayout.textContent = txt;
 
   } catch (err) {
     console.error(err);
