@@ -66,12 +66,6 @@
         <div>
           <h3 class="text-2xl font-bold mb-4">Rows</h3>
           <section id="rows-container" class="space-y-4"></section>
-
-          <div class="flex flex-wrap gap-2 mt-4">
-            <button type="button" id="add-numbers-row" class="btn btn-outline">+ Numbers Row</button>
-            <button type="button" id="add-letters-row" class="btn btn-outline">+ Letters Row</button>
-            <button type="button" id="add-bottom-row" class="btn btn-outline">+ Bottom Row</button>
-          </div>
         </div>
 
         <div class="divider"></div>
@@ -79,9 +73,7 @@
         <!-- Other Properties Section -->
         <div>
           <h3 class="text-2xl font-bold mb-4">Other Properties</h3>
-          <section id="other-property-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"></section>
-
-          <button type="button" id="add-other-property-item" class="btn btn-outline">+ Other Property</button>
+          <section id="other-property-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></section>
         </div>
       </form>
 
@@ -107,7 +99,7 @@
     </main>
   </div>
 
-  <div class="drawer-side is-drawer-close:overflow-visible">
+  <aside class="drawer-side is-drawer-close:overflow-visible">
     <label for="menu-sidebar" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="flex min-h-full flex-col items-start bg-base-300 is-drawer-close:w-14 is-drawer-open:w-64 pt-16">
       <!-- Sidebar content here -->
@@ -168,9 +160,99 @@
           </button>
         </li>
 
+        <li></li> <!-- works like a divider in menus -->
+
+        <li>
+          <button type="button" id="add-numbers-row" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Add Numbers Row" aria-label="Add Numbers Row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <!-- Plus Icon -->
+              <path d="M6 5v6" />
+              <path d="M3 8h6" />
+              <!-- Number Hash -->
+              <path d="M16 3l-1.5 8" />
+              <path d="M20 3l-1.5 8" />
+              <path d="M13 5h9" />
+              <path d="M12 9h9" />
+              <!-- 3-Key Row -->
+              <rect x="2" y="15" width="20" height="6" rx="1" />
+              <path d="M8 15v6" />
+              <path d="M16 15v6" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Add Numbers Row</span>
+          </button>
+        </li>
+
+        <li>
+          <button type="button" id="add-letters-row" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Add Letters Row" aria-label="Add Letters Row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <!-- Plus Icon -->
+              <path d="M6 5v6" />
+              <path d="M3 8h6" />
+              <!-- Letter A -->
+              <path d="M16 3l-4 8" />
+              <path d="M16 3l4 8" />
+              <path d="M14 7h4" />
+              <!-- 3-Key Row -->
+              <rect x="2" y="15" width="20" height="6" rx="1" />
+              <path d="M8 15v6" />
+              <path d="M16 15v6" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Add Letters Row</span>
+          </button>
+        </li>
+
+        <li>
+          <button type="button" id="add-bottom-row" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Add Bottom Row" aria-label="Add Bottom Row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <!-- Plus Icon -->
+              <path d="M6 5v6" />
+              <path d="M3 8h6" />
+              <!-- Space Symbol -->
+              <path d="M13 6v5h8V6" />
+              <!-- Spacebar Row (wide center key) -->
+              <rect x="2" y="15" width="20" height="6" rx="1" />
+              <path d="M7 15v6" />
+              <path d="M17 15v6" />
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Add Bottom Row</span>
+          </button>
+        </li>
+
+        <li></li>
+
+        <li>
+          <button type="button" id="add-other-property-item" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+            data-tip="Add Other Property" aria-label="Add Other Property">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              
+              <!-- Centered Plus (Add) -->
+              <path d="M12 4v6" />
+              <path d="M9 7h6" />
+              
+              <!-- Property/Behavior Block (Key-Value representation) -->
+              <!-- Property Row 1 -->
+              <path d="M4 15h5" />
+              <path d="M12 15h8" />
+              
+              <!-- Property Row 2 (Staggered to look like code/values) -->
+              <path d="M4 19h3" />
+              <path d="M12 19h5" />
+              
+            </svg>
+            <span class="is-drawer-close:hidden whitespace-nowrap">Add Other Property</span>
+          </button>
+        </li>
+
         <li class="flex grow justify-end">
           <!-- by Softorage -->
-          <a href="https://softorage.com/" target="_blank" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          <a href="https://github.com/Softorage/" target="_blank" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
             data-tip="A Softorage Project" aria-label="A Softorage Project">
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 654 422"><defs><linearGradient id="a" x2="1" gradientTransform="matrix(299 -217.236 229.302 315.607 178 319.618)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00b6ec"/><stop offset="1" stop-color="#00d874"/></linearGradient></defs><path d="M649.4 194.4c6 9 6 23.6 0 32.7l-75.8 115.2c-6 9-15.6 9-21.5 0-6-9-6-23.6 0-32.6l65.1-99-65.1-99c-5.9-9-5.9-23.6 0-32.6s15.6-9 21.5 0c0 0 75.9 115.2 75.8 115.3" style="fill:#00d774"/><path d="M5.2 194.9c-5.9 9-5.9 23.6 0 32.7L80.9 343c5.9 9 15.5 9 21.4 0s5.9-23.7 0-32.7l-65-99.1 64.9-99.2c5.9-9 5.9-23.6 0-32.7-5.9-9-15.5-9-21.4 0 0 0-75.7 115.5-75.6 115.6" style="fill:#00b6eb"/><path d="M324.3 233.2q-69.5-20-101.4-49-31.5-29.3-31.5-72.1 0-48.5 38.6-80Q268.8.3 330.8.3q42.3 0 75.2 16.3 33.2 16.3 51.3 45.1 18.3 28.7 18.3 62.8h-54.4q0-37.2-23.6-58.3-23.7-21.4-66.8-21.4-40 0-62.5 17.7Q246 80 246 111.2q0 25.1 21.1 42.6 21.5 17.2 72.4 31.5 51.3 14.4 80 31.8 29 17.2 42.8 40.3 14.1 23.1 14.1 54.4 0 49.8-38.8 80-38.9 29.8-104 29.8-42.2 0-78.8-16-36.7-16.4-56.7-44.5-19.7-28.2-19.7-64h54.4q0 37.2 27.3 58.9 27.6 21.4 73.5 21.4 42.8 0 65.6-17.5 22.9-17.4 22.9-47.6 0-30.1-21.2-46.4-21.1-16.6-76.6-32.7" aria-label="S" style="fill:url(#a)"/></svg>
             <span class="is-drawer-close:hidden whitespace-nowrap">A Softorage Project</span>
@@ -183,7 +265,7 @@
         </li>
       </ul>
     </div>
-  </div>
+  </aside>
 
   <!-- =============================== -->
   <!--           TEMPLATES             -->

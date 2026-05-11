@@ -277,7 +277,7 @@ DOM.form.addEventListener('submit', e => {
 
 // --- Initialization & Button Binding ---
 
-document.getElementById('preview-btn').onclick = () => DOM.form.requestSubmit(); // scroll to generated yaml and enable apt tab
+document.getElementById('preview-btn').onclick = () => DOM.form.requestSubmit(); // TODO: scroll to generated yaml and enable apt tab
 
 document.getElementById('add-numbers-row').onclick = () => {
   if (!DOM.rowsContainer.querySelector('[data-type="numbers"]')) DOM.rowsContainer.prepend(createRow('numbers'));
@@ -437,3 +437,7 @@ if (DOM.importInput) {
     DOM.importInput.value = ''; // Reset input to allow re-importing the same file later
   });
 }
+
+// Add a letter row and other property on page load
+DOM.rowsContainer.appendChild(createRow('letters'));
+addOtherProperty();
