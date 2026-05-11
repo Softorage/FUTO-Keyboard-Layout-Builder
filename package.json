@@ -1,6 +1,6 @@
 {
   "name": "futo-keyboard-layout-builder",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A simple web based graphical interface to help create keyboard layout for FUTO Keyboard",
   "packageManager": "pnpm@10.33.0",
   "private": true,
