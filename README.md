@@ -17,9 +17,9 @@ A simple web based graphical interface to help create keyboard layout for FUTO K
 
 ### Basic Information
 
-* Name: Name of the keyboard layout
-* Description: Description of the keyboard layout
+* Layout Name: Name of the keyboard layout
 * Language Code: Language code of the keyboard layout
+* Description: Description of the keyboard layout
 
 ### Rows
 
