@@ -47,6 +47,141 @@
       </div>
     </nav>
   </header>
+  <dialog id="basic_instructions" class="modal">
+    <div class="modal-box w-auto max-w-5xl">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="basic_instructions.close()">✕</button>
+      <h3 class="text-2xl font-bold">How to use</h3>
+      <div class="py-4 prose">
+        <h4>Basic Information</h4>
+        <ul>
+          <li>
+            <p>Name: Name of the keyboard layout</p>
+          </li>
+          <li>
+            <p>Description: Description of the keyboard layout</p>
+          </li>
+          <li>
+            <p>Language Code: Language code of the keyboard layout</p>
+          </li>
+        </ul>
+        <h4>Rows</h4>
+        <ul>
+          <li>
+            <p>Numbers Row: Row for numbers (1-9, 0). Can be 1 at max.</p>
+          </li>
+          <li>
+            <p>Letters Row: Rows for letters. Can be 8 at max.</p>
+          </li>
+          <li>
+            <p>Bottom Row: Row for bottom keys (e.g. space, symbols, enter). Can be 1 at max.</p>
+          </li>
+        </ul>
+        <h4>Keys</h4>
+        <p>A key is a combination of base key, shifted key, and more keys.</p>
+        <ul>
+          <li>
+            <p>Base Key: Key that is visible to the user.</p>
+          </li>
+          <li>
+            <p>Shifted Key: Key that is visible to the user when shift is pressed.</p>
+          </li>
+          <li>
+            <p>More Keys:</p>
+            <ul>
+              <li>
+                <p>Key(s) that is/are visible to the user when the key is long-pressed.</p>
+              </li>
+              <li>
+                <p>Comma separated.</p>
+              </li>
+              <li>
+                <p>More Keys can be specified for both Base Key (visible on long-press) and Shifted Key (visible on long-press while
+                  Shift is pressed).</p>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <blockquote>
+          <p>There can be at max 12 keys in each row.</p>
+        </blockquote>
+        <h4>A few Notes</h4>
+        <h5 class="font-bold">Template Keys</h5>
+        <p>You can use below keys (called Template Keys) for various behaviours:</p>
+        <ul>
+          <li>
+            <p>$shift - shift key</p>
+          </li>
+          <li>
+            <p>$delete - backspace key</p>
+          </li>
+          <li>
+            <p>$space - spacebar</p>
+          </li>
+          <li>
+            <p>$enter - enter/search/next/prev/go key</p>
+          </li>
+          <li>
+            <p>$symbols - switch to symbols menu</p>
+          </li>
+          <li>
+            <p>$alphabet - switch back to alphabet (only used in symbols layout)</p>
+          </li>
+          <li>
+            <p>$action - action key, user-defined, may be empty</p>
+          </li>
+          <li>
+            <p>$number - switch to numpad mode</p>
+          </li>
+          <li>
+            <p>$contextual - contextual key, / for URLs and date fields, @ for email fields, : for time fields</p>
+          </li>
+          <li>
+            <p>$zwnj - Zero-width non-joiner key, and zero-width joiner key in morekeys.</p>
+          </li>
+          <li>
+            <p>$optionalzwnj - same as $zwnj if useZWNJKey is true, else none</p>
+          </li>
+          <li>
+            <p>$gap - regular-width gap</p>
+          </li>
+          <li>
+            <p>$alt0 - switch to alt page 0, or back from alt page 0</p>
+          </li>
+          <li>
+            <p>$alt1 - switch to alt page 1, or back from alt page 1</p>
+          </li>
+          <li>
+            <p>$alt2 - switch to alt page 2, or back from alt page 2</p>
+          </li>
+        </ul>
+        <h5 class="font-bold">Keyboard Behaviour</h5>
+        <p>Some of the FUTO Keyboard&#39;s behaviour notes:</p>
+        <ul>
+          <li>
+            <p>A default number row and bottom row will be added by the keyboard if they are not explicitly defined.</p>
+          </li>
+          <li>
+            <p>The keyboard automatically prepends $shift and appends $delete to the final Letter Row. This can be overridden by:</p>
+            <ul>
+              <li>
+                <p>Specifying $shift and/or $delete somewhere OR</p>
+              </li>
+              <li>
+                <p>Specifying an explicit bottom row</p>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h5 class="font-bold">LayoutSpec</h5>
+        <p>For detailed instructions, follow the <a target="_blank"
+            href="https://github.com/futo-org/futo-keyboard-layouts/blob/main/LayoutSpec.md"> LayoutSpec documentation</a>.
+        </p>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+  </dialog>
   <div class="drawer lg:drawer-open">
     <input id="menu-sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
@@ -135,9 +270,8 @@
         <!-- Sidebar content here -->
         <ul class="menu w-full grow gap-2">
           <li>
-            <a href="https://github.com/Softorage/FUTO-Keyboard-Layout-Builder/blob/main/README.md" target="_blank"
-              rel="noopener noreferrer" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-              data-tip="Basic Instructions" aria-label="Basic instructions (opens in a new tab)">
+            <!-- Basic Instructions -->
+            <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Basic Instructions" aria-label="Basic instructions" onclick="basic_instructions.showModal()">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
@@ -145,7 +279,7 @@
                 <line x1="12" x2="12.01" y1="17" y2="17" />
               </svg>
               <span class="is-drawer-close:hidden whitespace-nowrap">Basic Instructions</span>
-            </a>
+            </button>
           </li>
 
           <li>
@@ -281,6 +415,20 @@
           </li>
 
           <li class="flex flex-col gap-2 grow justify-end">
+            <hr class="border-base-content/10 hover:bg-inherit cursor-default">
+            <!-- Source code -->
+            <a href="https://github.com/Softorage/FUTO-Keyboard-Layout-Builder/" target="_blank" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+              data-tip="View Source Code" aria-label="View Source Code">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M6 5C6 4.44772 6.44772 4 7 4C7.55228 4 8 4.44772 8 5C8 5.55228 7.55228 6 7 6C6.44772 6 6 5.55228 6 5ZM8 7.82929C9.16519 7.41746 10 6.30622 10 5C10 3.34315 8.65685 2 7 2C5.34315 2 4 3.34315 4 5C4 6.30622 4.83481 7.41746 6 7.82929V16.1707C4.83481 16.5825 4 17.6938 4 19C4 20.6569 5.34315 22 7 22C8.65685 22 10 20.6569 10 19C10 17.7334 9.21506 16.6501 8.10508 16.2101C8.45179 14.9365 9.61653 14 11 14H13C16.3137 14 19 11.3137 19 8V7.82929C20.1652 7.41746 21 6.30622 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.30622 15.8348 7.41746 17 7.82929V8C17 10.2091 15.2091 12 13 12H11C9.87439 12 8.83566 12.3719 8 12.9996V7.82929ZM18 6C18.5523 6 19 5.55228 19 5C19 4.44772 18.5523 4 18 4C17.4477 4 17 4.44772 17 5C17 5.55228 17.4477 6 18 6ZM6 19C6 18.4477 6.44772 18 7 18C7.55228 18 8 18.4477 8 19C8 19.5523 7.55228 20 7 20C6.44772 20 6 19.5523 6 19Z" />
+              </svg>
+              <span class="is-drawer-close:hidden whitespace-nowrap">View Source Code</span>
+              <svg class="is-drawer-close:hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
             <!-- by Softorage -->
             <a href="https://github.com/Softorage/" target="_blank" class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
               data-tip="A Softorage Project" aria-label="A Softorage Project">
@@ -327,6 +475,11 @@
     <template id="tmpl-key-field">
       <div
         class="key-field bg-base-100 border border-base-300 rounded-box p-3 relative flex flex-col lg:flex-row gap-3 items-end shadow-sm">
+        <button type="button" class="remove-key btn btn-error btn-xs btn-circle shrink-0 lg:hidden" title="Remove Key">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
         <label class="w-full">
           <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Base Key</span></div>
           <input class="base input input-sm input-bordered w-full" placeholder="e.g. a, $shift" />
@@ -343,7 +496,7 @@
           <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">More-keys (Shift)</span></div>
           <input class="more-shifted input input-sm input-bordered w-full" placeholder="comma-sep" />
         </label>
-        <button type="button" class="remove-key btn btn-error btn-sm btn-square shrink-0" title="Remove Key">
+        <button type="button" class="remove-key btn btn-error btn-xs btn-circle shrink-0 hidden lg:flex" title="Remove Key">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -354,8 +507,11 @@
     <!-- Other Property Item Template -->
     <template id="tmpl-other-property">
       <div class="other-property-item bg-base-300 border border-base-300 rounded-box p-4 relative shadow-sm">
-        <button type="button" class="remove-attr btn btn-error btn-xs btn-circle absolute top-2 right-2"
-          title="Remove property">✕</button>
+        <button type="button" class="remove-attr btn btn-error btn-xs btn-circle absolute top-2 right-2" title="Remove property">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
         <label class="block w-full mb-4">
           <div class="pt-0 pb-1"><span class="text-base-content/75 font-semibold">Property name</span></div>
           <input type="text" class="other-attr-name input input-sm input-bordered w-full pr-8"

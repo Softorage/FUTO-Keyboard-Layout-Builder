@@ -117,7 +117,9 @@ function addKeyField(container, data = null) {
     }
   }
 
-  wrapper.querySelector('.remove-key').addEventListener('click', () => wrapper.remove());
+  wrapper.querySelectorAll('.remove-key').forEach(button => {
+    button.addEventListener('click', () => wrapper.remove());
+  });
   container.appendChild(wrapper);
   return true;
 }

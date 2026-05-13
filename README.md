@@ -4,7 +4,16 @@ A simple web based graphical interface to help create keyboard layout for FUTO K
 
 [Visit here](https://softorage.github.io/FUTO-Keyboard-Layout-Builder/)
 
-## How to use
+## Table of Contents
+
+- [Usage](#usage)
+- [FAQ](#faq)
+- [Credits](#credits)
+- [Other tools](#other-tools)
+- [What is Softorage?](#what-is-softorage)
+- [License](#license)
+
+## Usage
 
 ### Basic Information
 
@@ -31,9 +40,9 @@ A key is a combination of base key, shifted key, and more keys.
 
 > There can be at max 12 keys in each row.
 
-## Notes
+### A few Notes
 
-### Template Keys
+#### Template Keys
 
 You can use below keys (called Template Keys) for various behaviours:
 *  $shift - shift key
@@ -52,7 +61,7 @@ You can use below keys (called Template Keys) for various behaviours:
 *  $alt1 - switch to alt page 1, or back from alt page 1
 *  $alt2 - switch to alt page 2, or back from alt page 2
 
-### Keyboard Behaviour
+#### Keyboard Behaviour
 
 Some of the FUTO Keyboard's behaviour notes:
 * A default number row and bottom row will be added by the keyboard if they are not explicitly defined.
@@ -60,9 +69,32 @@ Some of the FUTO Keyboard's behaviour notes:
   * Specifying $shift and/or $delete somewhere OR
   * Specifying an explicit bottom row
 
-### LayoutSpec
+#### LayoutSpec
 
 For detailed instructions, follow the [ LayoutSpec documentation](https://github.com/futo-org/futo-keyboard-layouts/blob/main/LayoutSpec.md).
+
+## FAQ
+
+1. Do you know how to code? Do you use AI to develop this project? Is this vibe-coded?
+
+   Yes. I think, I may kinda know how to code. I am fairly confident that I understand the code I maintain (I keep forgetting though). Sometimes, there do appear parts of code (often via LLMs) that work and I don't quite understand how (and I have to ask to understand). But hey, that was the case even in StackOverflow days. I guess I'm dumb, just not enough to constantly keep messing the code. (-> Sanmay)  
+   We may use AI when developing this project. If you find any issues, please report them to us. We will try to fix them as soon as possible.  
+   No.
+   
+## Credits
+
+- FUTO
+- Softorage
+
+
+## Other tools
+
+- *Looking for a throttlestop alternative for your Intel CPU on Linux? Try our other tool: [undervolt-go](https://github.com/Softorage/undervolt-go). It comes with all the risks of a system level utility, though.*
+- *Looking for a a simple 7-zip GUI on Linux that has all the advanced features that you are used to? Try our other tool: [7z-GUI-Linux](https://github.com/Softorage/7z-GUI-Linux).*
+
+## What is Softorage?
+
+Softorage is a software discovery platform that takes user trust and safety very seriously. It allows you to get the software on your computer, but with a distinction. Instead of hosting the packages (which involves risks of package manipulation, and is a well known malware vector), it simply links you to the official developer's website. This helps ensure that you get the software package as the original developers intended.
 
 ## License
 
